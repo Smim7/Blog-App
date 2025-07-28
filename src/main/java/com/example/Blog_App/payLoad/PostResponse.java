@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -16,4 +17,6 @@ public class PostResponse {
     private int totalElements;
     private int totalPages;
     private boolean last;
+    private Set<CommentDto> comments;
+
 }
