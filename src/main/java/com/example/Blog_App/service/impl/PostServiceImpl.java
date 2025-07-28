@@ -9,6 +9,7 @@ import com.example.Blog_App.service.PostService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -37,10 +38,12 @@ public class PostServiceImpl  implements PostService {
     }
 
     @Override
-    public PostResponse  getALlPosts(int pageNo,int pageSize) {
+    public PostResponse  getALlPosts(int pageNo,int pageSize,String sortBy,String sortDir) {
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
 
         // create Pageable instance
-        Pageable pageable = PageRequest.of(pageNo, pageSize);//Creates pagination config
+        Pageable pageable = PageRequest.of(pageNo,pageSize, sort);//Creates pagination config
         Page<Post> posts = postRepository.findAll(pageable);//Fetches paged data from DB
         // get content for page object
         List<Post> listOfPosts = posts.getContent();//Extracts content from the page
