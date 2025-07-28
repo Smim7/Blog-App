@@ -1,10 +1,14 @@
 package com.example.Blog_App.service.impl;
 
 import com.example.Blog_App.entity.Post;
+import com.example.Blog_App.exception.ResourceNotFoundException;
 import com.example.Blog_App.payLoad.PostDto;
 import com.example.Blog_App.repository.PostRepository;
 import com.example.Blog_App.service.PostService;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PostServiceImpl  implements PostService {
@@ -18,20 +22,66 @@ public class PostServiceImpl  implements PostService {
     @Override
     public PostDto createPost(PostDto postDto) {
         //convert Dto to entity
-        Post post = new Post();
-        post.setTitle(post.getTitle());
-        post.setDescription(post.getDescription());
-        post.setContent(post.getContent());
-
+        Post post = mapToEntity(postDto);
         Post newPost=postRepository.save(post);
 
         //convert entity to Dto
-        PostDto postResponse=new PostDto();
-        postResponse.setId(newPost.getId());
-        postResponse.setTitle(newPost.getTitle());
-        postResponse.setDescription(newPost.getDescription());
-        postResponse.setContent(newPost.getContent());
-
+        PostDto postResponse=mapToDto(newPost);
         return postResponse;
+    }
+
+    @Override
+    public List<PostDto> getALlPosts() {
+        List<Post> posts = postRepository.findAll();
+       return posts.stream().map(post -> mapToDto(post)).collect(Collectors.toList());
+    }
+
+    @Override
+    public PostDto getPostById(Long id) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Post","id",id));
+        return mapToDto(post);
+    }
+
+    @Override
+    public PostDto updatePost(PostDto postDto, Long id) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Post","id",id));
+       post.setTitle(postDto.getTitle());
+       post.setDescription(postDto.getDescription());
+       post.setContent(postDto.getContent());
+
+       Post updatedPost=postRepository.save(post);
+       return mapToDto(updatedPost);
+
+
+
+    }
+
+    @Override
+    public void deletePostById(Long id) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Post","id",id));
+        postRepository.delete(post);
+
+    }
+
+
+    //convert Entity to DTO
+    private PostDto mapToDto(Post post) {
+        PostDto postDto =new PostDto();
+        postDto.setId(post.getId());
+        postDto.setTitle(post.getTitle());
+        postDto.setDescription(post.getDescription());
+        postDto.setContent(post.getContent());
+        return postDto;
+    }
+    //convert Dto to ENTITY
+    private Post mapToEntity(PostDto postDto) {
+        Post post = new Post();
+        post.setTitle(postDto.getTitle());
+        post.setDescription(postDto.getDescription());
+        post.setContent(postDto.getContent());
+        return post;
     }
 }
