@@ -15,10 +15,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static java.util.Arrays.stream;
-
 @Service
-public class PostServiceImpl  implements PostService {
+public class PostServiceImpl implements PostService {
     private PostRepository postRepository;
 
     public PostServiceImpl(PostRepository postRepository) {
@@ -30,27 +28,27 @@ public class PostServiceImpl  implements PostService {
     public PostDto createPost(PostDto postDto) {
         //convert Dto to entity
         Post post = mapToEntity(postDto);
-        Post newPost=postRepository.save(post);
+        Post newPost = postRepository.save(post);
 
         //convert entity to Dto
-        PostDto postResponse=mapToDto(newPost);
+        PostDto postResponse = mapToDto(newPost);
         return postResponse;
     }
 
     @Override
-    public PostResponse  getALlPosts(int pageNo,int pageSize,String sortBy,String sortDir) {
+    public PostResponse getALlPosts(int pageNo, int pageSize, String sortBy, String sortDir) {
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
                 : Sort.by(sortBy).descending();
 
         // create Pageable instance
-        Pageable pageable = PageRequest.of(pageNo,pageSize, sort);//Creates pagination config
+        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);//Creates pagination config
         Page<Post> posts = postRepository.findAll(pageable);//Fetches paged data from DB
         // get content for page object
         List<Post> listOfPosts = posts.getContent();//Extracts content from the page
 
-     List<PostDto>  content=
-             listOfPosts.stream()
-                     .map(post -> mapToDto(post)).collect(Collectors.toList());
+        List<PostDto> content =
+                listOfPosts.stream()
+                        .map(post -> mapToDto(post)).collect(Collectors.toList());
         PostResponse postResponse = new PostResponse();
         postResponse.setContent(content);
         postResponse.setPageNo(posts.getNumber());
@@ -65,21 +63,20 @@ public class PostServiceImpl  implements PostService {
     @Override
     public PostDto getPostById(Long id) {
         Post post = postRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Post","id",id));
+                .orElseThrow(() -> new ResourceNotFoundException("Post", "id", id));
         return mapToDto(post);
     }
 
     @Override
     public PostDto updatePost(PostDto postDto, Long id) {
         Post post = postRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Post","id",id));
-       post.setTitle(postDto.getTitle());
-       post.setDescription(postDto.getDescription());
-       post.setContent(postDto.getContent());
+                .orElseThrow(() -> new ResourceNotFoundException("Post", "id", id));
+        post.setTitle(postDto.getTitle());
+        post.setDescription(postDto.getDescription());
+        post.setContent(postDto.getContent());
 
-       Post updatedPost=postRepository.save(post);
-       return mapToDto(updatedPost);
-
+        Post updatedPost = postRepository.save(post);
+        return mapToDto(updatedPost);
 
 
     }
@@ -87,7 +84,7 @@ public class PostServiceImpl  implements PostService {
     @Override
     public void deletePostById(Long id) {
         Post post = postRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Post","id",id));
+                .orElseThrow(() -> new ResourceNotFoundException("Post", "id", id));
         postRepository.delete(post);
 
     }
@@ -95,13 +92,14 @@ public class PostServiceImpl  implements PostService {
 
     //convert Entity to DTO
     private PostDto mapToDto(Post post) {
-        PostDto postDto =new PostDto();
+        PostDto postDto = new PostDto();
         postDto.setId(post.getId());
         postDto.setTitle(post.getTitle());
         postDto.setDescription(post.getDescription());
         postDto.setContent(post.getContent());
         return postDto;
     }
+
     //convert Dto to ENTITY
     private Post mapToEntity(PostDto postDto) {
         Post post = new Post();
