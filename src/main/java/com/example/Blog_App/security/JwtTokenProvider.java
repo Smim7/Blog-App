@@ -1,10 +1,7 @@
 package com.example.Blog_App.security;
 
 import com.example.Blog_App.exception.BlogApiException;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.UnsupportedJwtException;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -37,18 +34,13 @@ public class JwtTokenProvider {
 
         Date expireDate = new Date(currentDate.getTime() + jwtExpirationDate);
 
-        // Extract roles from Authentication
-//        List<String> roles = authentication.getAuthorities()
-//                .stream()
-//                .map(authority -> authority.getAuthority())
-//                .collect(Collectors.toList());
-
-        String token = Jwts.builder()
-                .subject(username)
+       String token = Jwts.builder()
+               .subject(username)
+                //.claim("roles",roles)
                 //.claim("roles", roles)
                 .issuedAt(new Date())
-                .expiration(expireDate)
-                .signWith(key())
+               .expiration(expireDate)
+               .signWith(key())
                 .compact();
 
         return token;
@@ -87,20 +79,7 @@ public class JwtTokenProvider {
             throw new BlogApiException(HttpStatus.BAD_REQUEST, "Jwt claims string is null or empty");
         }
     }
-//    public List<GrantedAuthority> getAuthorities(String token) {
-//        var claims = Jwts.parser()
-//                .verifyWith((SecretKey) key())
-//                .build()
-//                .parseSignedClaims(token)
-//                .getPayload();
-//
-//        var roles = (List<String>) claims.get("roles");
-//        if (roles == null) return List.of();
-//
-//        return roles.stream()
-//                .map(SimpleGrantedAuthority::new)
-//                .collect(Collectors.toList());
-//    }
+
 
 
 }
