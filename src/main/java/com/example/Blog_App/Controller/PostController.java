@@ -5,6 +5,9 @@ import com.example.Blog_App.payLoad.PostDto2;
 import com.example.Blog_App.payLoad.PostResponse;
 import com.example.Blog_App.service.PostService;
 import com.example.Blog_App.utils.AppConstants;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +20,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 //api/v1/posts
+//@SecurityRequirement(name = "BearerAuth")
 public class PostController {
     private PostService postService;
 
@@ -25,7 +29,18 @@ public class PostController {
         this.postService = postService;
     }
     //create blog post REST API
-    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(
+            summary = "Create Post REST API",
+            description = "Create Post REST API is used to save post into database"
+    )
+    @ApiResponse(
+            responseCode = "201",
+            description = "Http Status 201 CREATED"
+    )
+    @SecurityRequirement(
+            name = "Bear Authentication"
+    )
+    @PreAuthorize("hasRole('ROLL_ADMIN')")
 @PostMapping("api/v1/posts")
     public ResponseEntity<PostDto> createPost(@Valid @RequestBody PostDto postDto) {
 
@@ -72,7 +87,7 @@ public class PostController {
 
 
     //update post by id REST API
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLL_ADMIN')")
  @PutMapping("/api/v1/posts/{id}")
     public ResponseEntity<PostDto> updatePost(@Valid @RequestBody PostDto postDto,
                                               @PathVariable Long id) {
