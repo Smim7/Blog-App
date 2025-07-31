@@ -2,6 +2,7 @@ com/example/Blog_App/payLoad/PostResponse.class
 com/example/Blog_App/security/JwtAuthenticationFilter.class
 com/example/Blog_App/payLoad/RegisterDto.class
 com/example/Blog_App/security/JwtTokenProvider.class
+com/example/Blog_App/confiq/SwaggerConfig.class
 com/example/Blog_App/repository/UserRepository.class
 com/example/Blog_App/payLoad/LoginDto.class
 com/example/Blog_App/exception/ResourceNotFoundException.class

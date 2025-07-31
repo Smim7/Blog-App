@@ -3,6 +3,7 @@
 /Users/mehedishohag/Desktop/Somaya Coding/Blog-App/src/main/java/com/example/Blog_App/Controller/CommentController.java
 /Users/mehedishohag/Desktop/Somaya Coding/Blog-App/src/main/java/com/example/Blog_App/Controller/PostController.java
 /Users/mehedishohag/Desktop/Somaya Coding/Blog-App/src/main/java/com/example/Blog_App/confiq/SecurityConfiq.java
+/Users/mehedishohag/Desktop/Somaya Coding/Blog-App/src/main/java/com/example/Blog_App/confiq/SwaggerConfig.java
 /Users/mehedishohag/Desktop/Somaya Coding/Blog-App/src/main/java/com/example/Blog_App/entity/Comment.java
 /Users/mehedishohag/Desktop/Somaya Coding/Blog-App/src/main/java/com/example/Blog_App/entity/Post.java
 /Users/mehedishohag/Desktop/Somaya Coding/Blog-App/src/main/java/com/example/Blog_App/entity/Role.java

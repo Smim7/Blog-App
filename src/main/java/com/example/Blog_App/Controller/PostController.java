@@ -37,9 +37,9 @@ public class PostController {
             responseCode = "201",
             description = "Http Status 201 CREATED"
     )
-    @SecurityRequirement(
-            name = "Bear Authentication"
-    )
+//    @SecurityRequirement(
+//            name = "Bear Authentication"
+//    )
     @PreAuthorize("hasRole('ROLL_ADMIN')")
 @PostMapping("api/v1/posts")
     public ResponseEntity<PostDto> createPost(@Valid @RequestBody PostDto postDto) {
